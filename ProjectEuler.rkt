@@ -68,17 +68,16 @@
 ;; PROBLEM 2
 ;; Find the sum of the even-valued terms in the Fibonacci sequence that do
 ;;  not exceed 4 million
-(local [(define phi (/ (+ 1 (sqrt 5)) 2))
+(check-expect (= (local [(define phi (/ (+ 1 (sqrt 5)) 2))
         (define phi- (/ (- 1 (sqrt 5) )2))
         (define (find-nth n) (/ (- (expt phi n)(expt phi- n)) (sqrt 5)))]
-  (floor  (foldr + 0 (map find-nth (build-list 12 (lambda (x) (* 3 x)))))))
+  (floor  (foldr + 0 (map find-nth (build-list 12 (lambda (x) (* 3 x))))))) 4613732) true)
 ;; Answer: 4613732
 ;;************************************
 ;; PROBLEM 5
 ;; (euler5 x) finds the smallest number that is evenly divisible by all numbers from 1..n
 ;; Nat-> Nat
 ;; requires n>0
-
 (define (euler5 x)
   (local [(define (highest-power listoffactors x)
             (cond
@@ -104,10 +103,20 @@
 ;; euler10: Nat-> Nat
 ;; requires n>3
 (define (euler10 n)
-(local [(define form (ceiling (/ (- n 1) 6)))]
- (+ 5 (foldr + 0 (append (filter prime? (build-list form (lambda (x) (+ 1 (* 6 x)))))
-          (filter prime? (build-list form (lambda (x) (- (* 6 x) 1)))))))))
+(local [(define limit (ceiling (/ (- n 1) 6)))]
+ (+ 5 (foldr + 0 (append (filter prime? (build-list limit (lambda (x) (+ 1 (* 6 x)))))
+          (filter prime? (build-list limit (lambda (x) (- (* 6 x) 1)))))))))
 (check-expect (euler10 5) 5)
 (check-expect (euler10 10) 17)
 (check-expect (euler10 2000000) 142913828922)
 ;; ANSWER: 142913828922
+;;************************************
+;; PROBLEM 48
+;; (euler48 n y) produces the last y digits of the sum of the self power series till the nth number
+;; the self power series: 1^1 + 2^2 + 3^3 + 4^4...n^n
+;; Nat Nat-> Nat
+(define (euler48 n y)
+  (remainder (- (foldr + 0 (build-list (add1 n) (lambda (n) (expt n n)))) 1) (expt 10 y)))
+
+(check-expect (euler48 10 11) 10405071317)
+(check-expect (euler48 1000 10) 9110846700)
