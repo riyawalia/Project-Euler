@@ -1,2 +1,2 @@
 The solutions to Project Euler Problems using Racket- a functional programming language. The language is set to "Intermediate Student with Lambda" and I have used the math/number-theory library for one function (factorize) so far. 
-My solutions use the fact that all prime numbers, when divided by 6, either leave a remainder of 1 or 5.
+My solutions use the fact that all prime numbers (other than 2 and 3), when divided by 6, either leave a remainder of 1 or 5. Thus, every prime number (with the exeption of 2 and 3) can be written as 6n+1 or 6n-1, where n is a natural number. 
