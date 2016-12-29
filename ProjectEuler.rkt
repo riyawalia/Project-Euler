@@ -1,6 +1,8 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname ProjectEuler) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname ProjectEuler) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+(require math/number-theory) ;;the function factorize used in Problem 5 is from this library 
+
 ;;************************************
 ;; PROJECT EULER
 ;;************************************
@@ -20,30 +22,30 @@
 (check-expect (prime-theory 91)false)
 (check-expect (prime-theory 79)true)
 (check-expect (prime-theory 15485867) true)
-;; (factorial n) produces the factorial of consumed natural number n
-;; factorial: Nat-> Nat
-(define (factorial n)
+;; (my-factorial n) produces the my-factorial of consumed natural number n
+;; my-factorial: Nat-> Nat
+(define (my-factorial n)
   (foldr (lambda (first rest) (* first rest)) 1 (build-list n add1)))
-(check-expect (factorial 2) 2)
-(check-expect (factorial 5) 120)
-(check-expect (factorial 0) 1)
+(check-expect (my-factorial 2) 2)
+(check-expect (my-factorial 5) 120)
+(check-expect (my-factorial 0) 1)
 
-;; (prime? n) checks if n is a prime.
+;; (my-prime? n) checks if n is a prime.
 ;; Using Wilson's Theorem
-;; prime?: Nat-> Nat
+;; my-prime?: Nat-> Nat
 ;; requires: n>0
-(define (prime? n)
+(define (my-prime? n)
   (and (not (= n 1)) (or (= n 2) (= n 3) 
-                         (= (remainder (factorial (- n 1)) n) (- n 1)))))
-(check-expect (prime? 1) false)
-(check-expect (prime? 2) true)
-(check-expect (prime? 3)true)
-(check-expect (prime? 7) true)
-(check-expect (prime? 66)false)
-(check-expect (prime? 65)false)
-(check-expect (prime? 91) false)
-(check-expect (prime? 87) false)
-(check-expect (prime? 103)true)
+                         (= (remainder (my-factorial (- n 1)) n) (- n 1)))))
+(check-expect (my-prime? 1) false)
+(check-expect (my-prime? 2) true)
+(check-expect (my-prime? 3)true)
+(check-expect (my-prime? 7) true)
+(check-expect (my-prime? 66)false)
+(check-expect (my-prime? 65)false)
+(check-expect (my-prime? 91) false)
+(check-expect (my-prime? 87) false)
+(check-expect (my-prime? 103)true)
 ;;************************************
 ;; PROBLEM 1
 ;; (euler1 n) finds the sum of all the multiples of 3 or 5 below n.
@@ -72,3 +74,23 @@
   (floor  (foldr + 0 (map find-nth (build-list 12 (lambda (x) (* 3 x)))))))
 ;; Answer: 4613732
 ;;************************************
+;; PROBLEM 5
+;; (euler5 x) finds the smallest number that is evenly divisible by all numbers from 1..n
+;; Nat-> Nat
+;; requires n>0
+(define (euler5 x)
+  (local [(define  listoffactors
+            (foldr append empty (build-list (add1 x) (lambda (n) (factorize n)))))
+           (define (function listoffactors x)
+            (cond
+              [(empty? listoffactors) empty]
+              [else
+               (local [(define factor (filter (lambda (lst) (= x (first lst))) listoffactors))]
+                 (cond 
+                 [(empty? factor) (function (rest listoffactors) (sub1 x))] 
+                 [else (cons (first (sort factor (lambda (l1 l2) (> (second l1) (second l2))))) (function (filter (lambda (lst) (not (= x (first lst)))) listoffactors) (sub1 x)))]))]))]
+          
+          (foldr (lambda (lst rest) (* rest (expt (first lst) (second lst)))) 1 (function listoffactors (add1 x)))))
+
+(check-expect (euler5 20) 232792560)
+(check-expect (euler5 10) 2520)  
