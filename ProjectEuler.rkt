@@ -78,19 +78,23 @@
 ;; (euler5 x) finds the smallest number that is evenly divisible by all numbers from 1..n
 ;; Nat-> Nat
 ;; requires n>0
+
 (define (euler5 x)
-  (local [(define  listoffactors
-            (foldr append empty (build-list (add1 x) (lambda (n) (factorize n)))))
-           (define (function listoffactors x)
+  (local [(define (highest-power listoffactors x)
             (cond
               [(empty? listoffactors) empty]
               [else
                (local [(define factor (filter (lambda (lst) (= x (first lst))) listoffactors))]
                  (cond 
-                 [(empty? factor) (function (rest listoffactors) (sub1 x))] 
-                 [else (cons (first (sort factor (lambda (l1 l2) (> (second l1) (second l2))))) (function (filter (lambda (lst) (not (= x (first lst)))) listoffactors) (sub1 x)))]))]))]
-          
-          (foldr (lambda (lst rest) (* rest (expt (first lst) (second lst)))) 1 (function listoffactors (add1 x)))))
-
+                   [(empty? factor) (highest-power (rest listoffactors) (sub1 x))] 
+                   [else (cons (first (sort factor (lambda (l1 l2) (> (second l1) (second l2)))))
+                               (highest-power (filter (lambda (lst) (not (= x (first lst))))
+                                                      listoffactors) (sub1 x)))]))]))]    
+    (foldr (lambda (lst rest) (* rest (expt (first lst) (second lst))))
+           1 (highest-power (foldr append empty
+                                   (build-list (add1 x)
+                                               (lambda (n) (factorize n))))
+                            (add1 x)))))
 (check-expect (euler5 20) 232792560)
 (check-expect (euler5 10) 2520)  
+;; ANSWER: 232792560
