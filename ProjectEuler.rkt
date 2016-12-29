@@ -98,3 +98,42 @@
 (check-expect (euler5 20) 232792560)
 (check-expect (euler5 10) 2520)  
 ;; ANSWER: 232792560
+
+;;************************************
+;; PROBLEM 7
+;; (euler7 n) produces the nth prime
+;; m= multiple, always increments 
+;; x= number of primes found 
+;; Nat-> Nat
+(define (euler7 n)
+  (cond [(= n 1) 2]
+        [(= n 2) 3]
+        [else 
+  (local [(define (euler/acc x m p)
+            (cond
+              [(= x n) p]
+              [(and (= (- n 1) x) (prime? (- (* 6 m) 1)))   (- (* 6 m) 1)]
+              [(and (= (- n 1) x) (prime? (+ (* 6 m) 1)))   (+ (* 6 m) 1)]
+              [(and (prime? (+ 1 (* 6 m))) (prime? (- (* 6 m) 1))) (euler/acc (+ 2 x) (add1 m) p)]
+              [(or (prime? (- 1 (* 6 m))) (prime? (+ 1 (* 6 m)))) (euler/acc (add1 x) (add1 m) p)]
+              [ else (euler/acc x (add1 m) p)]))]
+    (euler/acc 2 1 empty))]))
+              
+(check-expect (euler7 3)5)
+(check-expect (euler7 1)2)
+(check-expect (euler7 2)3)
+;(check-expect (euler7 6)13)
+
+;;************************************
+;; PROBLEM 10
+;; (euler10 n) finds the sum of all prime numbers less than consumed number n
+;; euler10: Nat-> Nat
+;; requires n>3
+(define (euler10 n)
+(local [(define form (ceiling (/ (- n 1) 6)))]
+ (+ 5 (foldr + 0 (append (filter prime? (build-list form (lambda (x) (+ 1 (* 6 x)))))
+          (filter prime? (build-list form (lambda (x) (- (* 6 x) 1)))))))))
+(check-expect (euler10 5) 5)
+(check-expect (euler10 10) 17)
+(check-expect (euler10 2000000) 142913828922)
+;; ANSWER: 142913828922
