@@ -49,7 +49,7 @@
 (check-expect (my-prime? 103)true)
 ;;************************************
 ;; PROBLEM 1
-;; (euler1 n) finds the sum of all the multiples of 3 or 5 below n.
+;; (euler1 x) finds the sum of all the multiples of 3 or 5 below x.
 ;; using the fact that the sum of all natural numbers from 1 to n is given by
 ;;  n(n+1)/2
 ;; requires: x>0
@@ -103,7 +103,6 @@
 ;; (euler6 n) finds the difference between the sum of the squares of the first n number of natural
 ;;   numbers and the square of the sum of the first n number of natural numbers
 ;; euler6: Nat-> Nat
-
 (define (euler6 n)
   (-
    (expt (/ (* n (+ 1 n)) 2) 2) ;formula for sum of first n
