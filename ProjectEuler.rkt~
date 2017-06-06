@@ -112,6 +112,33 @@
 (check-expect (euler6 100) 25164150)
 ;; ANSWER: 25164150
 ;;************************************
+;; PROBLEM 7
+;; (euler7 n) produces the nth prime number 
+;; euler7: Nat-> Nat
+;; requires: n>0
+(define (euler7 n)
+  (cond
+    [(= 1 n) 2]
+    [(even? n) (local
+                 [(define primes
+                    (append (list 2 3) (filter prime? (build-list n (lambda (x) (+ 1 (* 6 x)))))))]
+                 (list-ref primes (floor (/ (length primes) 2))))]
+    [(odd? n) (local
+                 [(define primes
+                    (filter prime? (build-list n (lambda (x) (- (* 6 x) 1)))))]
+                 (list-ref primes (floor (/ (length primes) 2))))]))
+
+(check-expect (euler7 6) 13)
+(check-expect (euler7 7) 17)
+(check-expect (euler7 8) 19)
+(check-expect (euler7 9) 23)
+(check-expect (euler7 2) 3)
+(check-expect (euler7 1) 2)
+(check-expect (euler7 1001) 7927)
+
+;; ANSWER: 
+;;************************************
+
 ;; PROBLEM 10
 ;; (euler10 n) finds the sum of all prime numbers less than consumed number n
 ;; euler10: Nat-> Nat
@@ -138,3 +165,10 @@
 (check-expect (euler48 10 11) 10405071317)
 (check-expect (euler48 1000 10) 9110846700)
 ;; ANSWER: 9110846700
+
+;; PROBLEM 16
+;; if number is divisible by 4, last digit should be either 4 or 6
+;; if expt is odd,  otherwise 6
+;; so last 2 digits are 76
+;; first digit is 1
+;; (expt 2 1000)= 4^500 = 16^250 = 32^125

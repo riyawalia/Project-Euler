@@ -9,7 +9,7 @@
 ;;(prime-theory n) consumes an integer number and determines whether it is prime or not.
 ;;   It uses the prime theory (Sieving Algorithm) that if a number n is not divisible by any numbers less
 ;;    than it's square root, it is prime.
-;; prime-theory: Int-> Bool
+;; prime-theory: Int -> Bool
 (define (prime-theory n)
   (and (not (= 1 n)) (not (ormap
                            (lambda (f)  (= 0 (remainder n f)))
@@ -23,7 +23,7 @@
 (check-expect (prime-theory 79)true)
 (check-expect (prime-theory 15485867) true)
 ;; (my-factorial n) produces the factorial of consumed natural number n
-;; my-factorial: Nat-> Nat
+;; my-factorial: Nat -> Nat
 (define (my-factorial n)
   (foldr (lambda (first rest) (* first rest)) 1 (build-list n add1)))
 (check-expect (my-factorial 2) 2)
@@ -31,9 +31,9 @@
 (check-expect (my-factorial 0) 1)
 
 ;; (my-prime? n) checks if n is a prime.
-;; Using Wilson's Theorem: if n>3 and n is a prime then (n-1)! is congruent to -1 modulus n
+;; Using Wilson's Theorem: if n > 3 and n is a prime then (n - 1)! is congruent to -1 modulus n
 ;; Remember that the only 2 primes that Wilson's theorem does not hold true for is 2 and 3
-;; my-prime?: Int-> Bool
+;; my-prime?: Int -> Bool
 (define (my-prime? n)
   (and (not (= n 0)) (not (= (abs n) 1)) (or (= (abs n) 2) (= (abs n) 3) 
                                              (= (remainder (my-factorial (- (abs n) 1)) (abs n)) (- (abs n) 1)))))
@@ -51,7 +51,7 @@
 ;; PROBLEM 1
 ;; (euler1 x) finds the sum of all the multiples of 3 or 5 below x.
 ;; using the fact that the sum of all natural numbers from 1 to n is given by
-;;  n(n+1)/2
+;;  n * (n + 1) / 2
 ;; requires: x>0
 ;; euler1: Num-> Nat
 (define (euler1 x)
@@ -77,8 +77,8 @@
 ;;************************************
 ;; PROBLEM 5
 ;; (euler5 x) finds the smallest number that is evenly divisible by all numbers from 1..n
-;; euler5: Nat-> Nat
-;; requires n>0
+;; euler5: Nat -> Nat
+;; requires n > 0
 (define (euler5 x)
   (local [(define (highest-power listoffactors x)
             (cond
@@ -102,7 +102,7 @@
 ;; PROBLEM 6
 ;; (euler6 n) finds the difference between the sum of the squares of the first n number of natural
 ;;   numbers and the square of the sum of the first n number of natural numbers
-;; euler6: Nat-> Nat
+;; euler6: Nat -> Nat
 (define (euler6 n)
   (-
    (expt (/ (* n (+ 1 n)) 2) 2) ;formula for sum of first n
@@ -114,8 +114,8 @@
 ;;************************************
 ;; PROBLEM 7
 ;; (euler7 n) produces the nth prime number 
-;; euler7: Nat-> Nat
-;; requires: n>0
+;; euler7: Nat -> Nat
+;; requires: n > 0
 (define (euler7 n)
   (cond
     [(= 1 n) 2]
@@ -141,8 +141,8 @@
 
 ;; PROBLEM 10
 ;; (euler10 n) finds the sum of all prime numbers less than consumed number n
-;; euler10: Nat-> Nat
-;; requires n>3
+;; euler10: Nat -> Nat
+;; requires: n > 3
 (define (euler10 n)
   (local [(define limit (ceiling (/ (- n 1) 6)))]
     (+ 5 (foldr + 0 (append (filter prime? (build-list limit (lambda (x) (+ 1 (* 6 x)))))
@@ -155,7 +155,7 @@
 ;; PROBLEM 48
 ;; (euler48 n y) produces the last y digits of the sum of the self power series till the nth number
 ;; the self power series: 1^1 + 2^2 + 3^3 + 4^4...n^n
-;; Nat Nat-> Nat
+;; Nat Nat -> Nat
 (define (euler48 n y)
   (remainder (- (foldr + 0 (build-list (add1 n) (lambda (n) (expt n n)))) 1) (expt 10 y)))
 
